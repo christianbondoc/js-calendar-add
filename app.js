@@ -35,6 +35,6 @@ function dateFunc() {
     console.log("CID: " + day);
     console.log("CIY: " + year);
 
-    p.innerHTML = ("Your checkout date is: " + month + " " + day + ", " + year);
-
+    
+    p.innerHTML = `Your checkout date is ${month} ${day}, ${year}`;
 }
