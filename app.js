@@ -4,8 +4,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 $(function (getNum) {
     var $select = $(".number");
     for (i = 1; i <= 29; i++) {
-        // 1 Day = 24 Hours = 1440 minutes = 86400000 ms
-        $select.append($('<option></option>').val((i) * 86400000).html(i))
+        $select.append($('<option></option>').val((i)).html(i))
     }
 });
 // Change when select date on calendar
@@ -13,51 +12,29 @@ var calc = document.getElementById('calc');
 function dateFunc() {
     // Get Date from Calendar selection
     var dataEnd = $('[name="date_end"]').val();
-    // Turn Date from Calendar into Ms
-    var nDate = new Date(dataEnd);
+    // Create a checkin date moment
+    var checkinDate = moment(dataEnd, 'YYYY-M-DD');
 
-    msDate = nDate.getTime();
-    console.log(msDate); // Milisecond Date
-
-    // Get math value from 1-30 input and turn into millisecond
-    var x = $('.number').val();
-    // Turn value into int
-    var xNum = Number(x);
-    console.log(xNum);
-    // Add ms time and new int
-    var y = msDate + xNum;
-    console.log(y);
-
-    var d = new Date();
-
-    d.setTime(y);
-    console.log(d);
-    var month = (monthNames[d.getMonth()]);
-    var day = (d.getDate())
-
-    var nDay = Date.parse(day)
-
-    if (nDay == 30) {
-        day = 1;
-        month = (monthNames[d.getMonth()]++);;
-        console.log("HEY!");
-    } else {
-        day = (d.getDate() + 1)
+    // Check to make sure date is valid 
+    if(!checkinDate.isValid()){
+        alert('must add a valid checkin date');
+        return;
     }
+    // get the number of days of the stay
+    var stayLength = $('.number').val();
 
-    var year = ("20" + (d.getYear() - 100));
+    // get the checkoutDate by adding StayLength to CheckinDate
+    var checkoutDate = checkinDate.add(stayLength, 'days');
+
+    // Parse out month/day/year variables
+    var month = checkoutDate.format('MMMM');
+    var day = checkoutDate.format('D');
+    var year = checkoutDate.format('YYYY');
 
     console.log("CIM: " + month);
     console.log("CID: " + day);
     console.log("CIY: " + year);
 
     p.innerHTML = ("Your checkout date is: " + month + " " + day + ", " + year);
-
-    $(function () {
-        var $select = $(".number");
-        for (i = 1; i <= 30; i++) {
-            $select.append($('<option></option>').val(i * 86400000).html(i))
-        }
-    });
 
 }
